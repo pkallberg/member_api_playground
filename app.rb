@@ -1,7 +1,7 @@
 require 'sinatra'
-# require 'mongoid'
+require 'mongoid'
 
-# Mongoid.load!("./mongoid.yml")
+Mongoid.load!("./mongoid.yml")
 
 class MemberApi < Sinatra::Base
   # configure :production, :development, :staging, :test do
