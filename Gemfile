@@ -8,8 +8,8 @@ gem 'sinatra', '1.3.6'
 gem 'mongoid', '~> 3.1.0'
 gem 'thin'
 
-# gem 'grape'
-# gem 'grape-entity'
+gem 'grape'
+gem 'grape-entity'
 
 # gem 'httparty'
 
