@@ -12,9 +12,28 @@ class Member
   field :first_name, type: String
   field :last_name, type: String
 
-  def self.scrub_item_params(params)
+  attr_accessible :first_name, :last_name
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+end
+
+module MemberHelpers
+
+  def scrub_member_params(params)
     params.reject!{|k,v| v.blank? }
-    # params.select{|k,v| Member.accessible_attributes.to_a.include? k }
+    params.select{|k,v| Member.accessible_attributes.to_a.include? k }
+  end
+
+end
+
+module Entities
+  class Member < Grape::Entity
+    expose :id
+    expose :first_name
+    expose :last_name
+    expose :full_name
   end
 end
 
@@ -27,13 +46,7 @@ class MemberApi < Grape::API
 
   format :json
 
-  module Entities
-    class Member < Grape::Entity
-      expose :id
-      expose :first_name
-      expose :last_name
-    end
-  end
+  helpers MemberHelpers
 
   resource :members do
 
@@ -67,12 +80,7 @@ class MemberApi < Grape::API
 
     desc "Update a member."
     put ':id' do
-      member = Member.find(params[:id])
-      member.update_attributes(scrub_item_params(params))
-      # ({
-      #   first_name: params[:first_name],
-      #   last_name: params[:last_name]
-      # })
+      Member.find(params[:id]).update_attributes(scrub_member_params(params))
     end
 
   end
