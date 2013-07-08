@@ -19,7 +19,7 @@ gem 'grape-entity'
 #   gem 'rvm-capistrano'
 # end
 
-# group :test, :development do
-#   gem 'rspec'
-#   gem 'rack-test'
-# end
+group :test, :development do
+  gem 'rspec'
+  gem 'rack-test'
+end

@@ -13,7 +13,7 @@ class User
   field :last_name, type: String
   field :email, type: String
 
-  attr_accessible :first_name, :last_name
+  attr_accessible :first_name, :last_name, :email
 
   def full_name
     "#{first_name} #{last_name}"
