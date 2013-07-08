@@ -11,6 +11,11 @@ class Member
 
   field :first_name, type: String
   field :last_name, type: String
+
+  def self.scrub_item_params(params)
+    params.reject!{|k,v| v.blank? }
+    # params.select{|k,v| Member.accessible_attributes.to_a.include? k }
+  end
 end
 
 class MemberApi < Grape::API
@@ -58,6 +63,16 @@ class MemberApi < Grape::API
         first_name: params[:first_name],
         last_name: params[:last_name]
       })
+    end
+
+    desc "Update a member."
+    put ':id' do
+      member = Member.find(params[:id])
+      member.update_attributes(scrub_item_params(params))
+      # ({
+      #   first_name: params[:first_name],
+      #   last_name: params[:last_name]
+      # })
     end
 
   end
