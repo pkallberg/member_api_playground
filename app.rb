@@ -31,11 +31,16 @@ end
 
 module Entities
   class User < Grape::Entity
+    format_with :timestamp do |date|
+      date.strftime('%m/%d/%Y')
+    end
+
     expose :id
     expose :first_name
     expose :last_name
     expose :full_name
     expose :email
+    expose :created_at, :format_with => :timestamp
   end
 end
 
@@ -54,7 +59,8 @@ class UserApi < Grape::API
 
     desc "Return all users."
     get '/' do
-      User.limit(20)
+      users = User.limit(20)
+      present users, with: Entities::User, type: :full
     end
 
     desc "Return a user."
