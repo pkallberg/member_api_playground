@@ -5,7 +5,7 @@ require 'grape_entity'
 
 Mongoid.load!("./mongoid.yml")
 
-class Member
+class User
   include Mongoid::Document
   include Mongoid::Timestamps
 
@@ -19,17 +19,17 @@ class Member
   end
 end
 
-module MemberHelpers
+module UserHelpers
 
-  def scrub_member_params(params)
+  def scrub_params(params)
     params.reject!{|k,v| v.blank? }
-    params.select{|k,v| Member.accessible_attributes.to_a.include? k }
+    params.select{|k,v| User.accessible_attributes.to_a.include? k }
   end
 
 end
 
 module Entities
-  class Member < Grape::Entity
+  class User < Grape::Entity
     expose :id
     expose :first_name
     expose :last_name
@@ -37,7 +37,7 @@ module Entities
   end
 end
 
-class MemberApi < Grape::API
+class UserApi < Grape::API
   # configure :production, :development, :staging, :test do
   #   enable :logging
   # end
@@ -46,41 +46,41 @@ class MemberApi < Grape::API
 
   format :json
 
-  helpers MemberHelpers
+  helpers UserHelpers
 
-  resource :members do
+  resource :users do
 
-    desc "Return all members."
+    desc "Return all users."
     get '/' do
-      Member.limit(20)
+      User.limit(20)
     end
 
-    desc "Return a member."
+    desc "Return a user."
     params do
-      requires :id, type: String, desc: "Member id."
+      requires :id, type: String, desc: "User id."
     end
     route_param :id do
       get do
-        member = Member.find(params[:id])
-        present member, with: Entities::Member, type: :full
+        user = User.find(params[:id])
+        present user, with: Entities::User, type: :full
       end
     end
 
-    desc "Create a member."
+    desc "Create a user."
     params do
       requires :first_name, type: String, desc: "Your first name."
       requires :last_name, type: String, desc: "Your last name."
     end
     post do
-      Member.create!({
+      User.create!({
         first_name: params[:first_name],
         last_name: params[:last_name]
       })
     end
 
-    desc "Update a member."
+    desc "Update a user."
     put ':id' do
-      Member.find(params[:id]).update_attributes(scrub_member_params(params))
+      User.find(params[:id]).update_attributes(scrub_params(params))
     end
 
   end
