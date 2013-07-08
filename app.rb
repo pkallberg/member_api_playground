@@ -11,6 +11,7 @@ class User
 
   field :first_name, type: String
   field :last_name, type: String
+  field :email, type: String
 
   attr_accessible :first_name, :last_name
 
@@ -34,6 +35,7 @@ module Entities
     expose :first_name
     expose :last_name
     expose :full_name
+    expose :email
   end
 end
 
@@ -70,11 +72,13 @@ class UserApi < Grape::API
     params do
       requires :first_name, type: String, desc: "Your first name."
       requires :last_name, type: String, desc: "Your last name."
+      requires :email, type: String, desc: "Your email."
     end
     post do
       User.create!({
         first_name: params[:first_name],
-        last_name: params[:last_name]
+        last_name: params[:last_name],
+        email: params[:email]
       })
     end
 
