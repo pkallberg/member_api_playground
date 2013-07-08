@@ -83,5 +83,13 @@ class UserApi < Grape::API
       User.find(params[:id]).update_attributes(scrub_params(params))
     end
 
+    desc "Delete a user."
+    params do
+      requires :id, type: String, desc: "User ID."
+    end
+    delete ':id' do
+      User.find(params[:id]).destroy
+    end
+
   end
 end
