@@ -20,5 +20,5 @@ set :raise_errors, true
 set :logging, false
 
 def app
-  UserApi
+  Users::API
 end

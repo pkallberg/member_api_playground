@@ -44,62 +44,64 @@ module Entities
   end
 end
 
-class UserApi < Grape::API
-  # configure :production, :development, :staging, :test do
-  #   enable :logging
-  # end
+module Users
+  class API < Grape::API
+    # configure :production, :development, :staging, :test do
+    #   enable :logging
+    # end
 
-  rescue_from :all
+    rescue_from :all
 
-  format :json
+    format :json
 
-  helpers UserHelpers
+    helpers UserHelpers
 
-  resource :users do
+    resource :users do
 
-    desc "Return all users."
-    get '/' do
-      users = User.limit(20)
-      present users, with: Entities::User, type: :full
-    end
-
-    desc "Return a user."
-    params do
-      requires :id, type: String, desc: "User id."
-    end
-    route_param :id do
-      get do
-        user = User.find(params[:id])
-        present user, with: Entities::User, type: :full
+      desc "Return all users."
+      get '/' do
+        users = User.limit(20)
+        present users, with: Entities::User, type: :full
       end
-    end
 
-    desc "Create a user."
-    params do
-      requires :first_name, type: String, desc: "Your first name."
-      requires :last_name, type: String, desc: "Your last name."
-      requires :email, type: String, desc: "Your email."
-    end
-    post do
-      User.create!({
-        first_name: params[:first_name],
-        last_name: params[:last_name],
-        email: params[:email]
-      })
-    end
+      desc "Return a user."
+      params do
+        requires :id, type: String, desc: "User id."
+      end
+      route_param :id do
+        get do
+          user = User.find(params[:id])
+          present user, with: Entities::User, type: :full
+        end
+      end
 
-    desc "Update a user."
-    put ':id' do
-      User.find(params[:id]).update_attributes(scrub_params(params))
-    end
+      desc "Create a user."
+      params do
+        requires :first_name, type: String, desc: "Your first name."
+        requires :last_name, type: String, desc: "Your last name."
+        requires :email, type: String, desc: "Your email."
+      end
+      post do
+        User.create!({
+          first_name: params[:first_name],
+          last_name: params[:last_name],
+          email: params[:email]
+        })
+      end
 
-    desc "Delete a user."
-    params do
-      requires :id, type: String, desc: "User ID."
-    end
-    delete ':id' do
-      User.find(params[:id]).destroy
-    end
+      desc "Update a user."
+      put ':id' do
+        User.find(params[:id]).update_attributes(scrub_params(params))
+      end
 
+      desc "Delete a user."
+      params do
+        requires :id, type: String, desc: "User ID."
+      end
+      delete ':id' do
+        User.find(params[:id]).destroy
+      end
+
+    end
   end
 end

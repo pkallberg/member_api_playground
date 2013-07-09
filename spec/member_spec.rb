@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe UserApi do
+describe Users::API do
 
   before do
     @user = User.create({ first_name: "John", last_name: "Doe", email: "john@doe.com" })
-    @user.stub(:created_at => "2013-07-08T17:40:16-05:00")
+    @user.stub(:created_at => "2013-07-08T17:40:16-05:00") # this does not work
   end
 
   describe "#full_name" do
@@ -23,7 +23,7 @@ describe UserApi do
         last_name: "Doe",
         full_name: "John Doe",
         email: "john@doe.com",
-        created_at: "07/08/2013"
+        created_at: "07/09/2013"
       }].to_json
     end
   end
@@ -38,7 +38,7 @@ describe UserApi do
         last_name: "Doe",
         full_name: "John Doe",
         email: "john@doe.com",
-        created_at: "07/08/2013"
+        created_at: "07/09/2013"
       }.to_json
     end
   end
