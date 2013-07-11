@@ -3,8 +3,9 @@ require 'spec_helper'
 describe Users::API do
 
   before do
-    @user = User.create({ first_name: "John", last_name: "Doe", email: "john@doe.com" })
-    @user.stub(:created_at => "2013-07-08T17:40:16-05:00") # this does not work
+    @now = Time.now
+    @user = User.create({ first_name: "John", last_name: "Doe", email: "john@doe.com", created_at: @now })
+    # @user.stub(: => "2013-07-08T17:40:16-05:00") # this does not work
   end
 
   describe "#full_name" do
@@ -23,7 +24,7 @@ describe Users::API do
         last_name: "Doe",
         full_name: "John Doe",
         email: "john@doe.com",
-        created_at: "07/09/2013"
+        created_at: @now.to_i
       }].to_json
     end
   end
@@ -38,7 +39,7 @@ describe Users::API do
         last_name: "Doe",
         full_name: "John Doe",
         email: "john@doe.com",
-        created_at: "07/09/2013"
+        created_at: @now.to_i
       }.to_json
     end
   end

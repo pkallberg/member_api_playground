@@ -31,8 +31,8 @@ end
 
 module Entities
   class User < Grape::Entity
-    format_with :timestamp do |date|
-      date.strftime('%m/%d/%Y')
+    format_with :timestamp do |time|
+      time.to_i
     end
 
     expose :id
