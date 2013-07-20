@@ -2,6 +2,7 @@ require 'sinatra'
 require 'mongoid'
 require 'grape'
 require 'grape_entity'
+require 'warden'
 
 Mongoid.load!("./mongoid.yml")
 
@@ -49,6 +50,7 @@ module Users
     # configure :production, :development, :staging, :test do
     #   enable :logging
     # end
+    use Rack::Session::Cookie
 
     rescue_from :all
 

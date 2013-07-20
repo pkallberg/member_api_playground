@@ -11,6 +11,9 @@ gem 'thin'
 gem 'grape'
 gem 'grape-entity'
 
+gem 'warden'
+gem 'bcrypt-ruby'
+
 # gem 'httparty'
 
 # group :deployment do
