@@ -6,5 +6,4 @@ require "./app"
 #set :run, false
 #set :raise_errors, true
 
-#run UserApi
-run User::API
+run Users::API

@@ -2,7 +2,7 @@ require 'sinatra'
 require 'mongoid'
 require 'grape'
 require 'grape_entity'
-require 'warden'
+# require 'warden'
 
 Mongoid.load!("./mongoid.yml")
 
@@ -30,6 +30,14 @@ module UserHelpers
 
 end
 
+class Unique < Grape::Validations::Validator
+  def validate_param!(attr_name, params)
+    if User.where(attr_name => params[attr_name]).exists?
+      throw :error, status: 400, message: "#{attr_name}: must be unique"
+    end
+  end
+end
+
 module Entities
   class User < Grape::Entity
     format_with :timestamp do |time|
@@ -50,7 +58,6 @@ module Users
     # configure :production, :development, :staging, :test do
     #   enable :logging
     # end
-    use Rack::Session::Cookie
 
     rescue_from :all
 
@@ -81,7 +88,7 @@ module Users
       params do
         requires :first_name, type: String, desc: "Your first name."
         requires :last_name, type: String, desc: "Your last name."
-        requires :email, type: String, desc: "Your email."
+        requires :email, unique: true, type: String, desc: "Your email."
       end
       post do
         User.create!({
