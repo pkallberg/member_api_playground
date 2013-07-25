@@ -1,9 +1,7 @@
-require "rubygems"
-require "bundler/setup"
+require './config/environment'
+#require_relative './app/controllers/base_controller'
+Dir['./app/controllers/**/*.rb'].each {|file| require file}
 
-require "./app"
-
-#set :run, false
-#set :raise_errors, true
+#require "./app"
 
 run Users::API
