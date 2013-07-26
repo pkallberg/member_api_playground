@@ -66,12 +66,14 @@ module Users
         requires :first_name, type: String, desc: "Your first name."
         requires :last_name, type: String, desc: "Your last name."
         requires :email, unique: true, type: String, desc: "Your email."
+        requires :password, unique: true, type: String, desc: "Your password."
       end
       post do
         User.create!({
           first_name: params[:first_name],
           last_name: params[:last_name],
-          email: params[:email]
+          email: params[:email],
+          password: params[:password]
         })
       end
 
