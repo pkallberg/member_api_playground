@@ -32,9 +32,12 @@ end
 
 module Users
   class API < Grape::API
-    # configure :production, :development, :staging, :test do
-    #   enable :logging
-    # end
+    use Rack::Session::Cookie#, :secret => "replace this with some secret key"
+
+    use Warden::Manager do |manager|
+      manager.default_strategies :password
+      manager.failure_app = Users::API
+    end
 
     rescue_from :all
 
@@ -56,8 +59,14 @@ module Users
       end
       route_param :id do
         get do
-          user = User.find(params[:id])
-          present user, with: Entities::User, type: :full
+          # env['warden'].authenticate(:password)
+          env['warden'].authenticate!
+          if env['warden'].authenticated?
+            user = User.find(params[:id])
+            present user, with: Entities::User, type: :full
+          else
+            error! "Unauthorized", 401 unless env['warden'].user
+          end
         end
       end
 
