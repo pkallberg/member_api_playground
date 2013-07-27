@@ -12,7 +12,7 @@ Warden::Strategies.add(:password) do
   end
 
   def authenticate!
-    user = User.where(email: params["email"])
+    user = User.where(email: params["email"]).first
     if user && user.authenticate(params["password"])
       success!(user)
     else

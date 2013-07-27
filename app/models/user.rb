@@ -12,4 +12,8 @@ class User
   def full_name
     "#{first_name} #{last_name}"
   end
+
+  def authenticate(password)
+    self.password == password
+  end
 end
