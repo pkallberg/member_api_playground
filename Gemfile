@@ -19,6 +19,10 @@ gem 'bcrypt-ruby'
 #   gem 'rvm-capistrano'
 # end
 
+group :development do
+  gem 'pry'
+end
+
 group :test, :development do
   gem 'rspec'
   gem 'rack-test'
