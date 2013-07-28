@@ -1,9 +1,9 @@
+Warden::Manager.serialize_into_session { |user| user.id }
+Warden::Manager.serialize_from_session { |id| User.get(id) }
+
 Warden::Manager.before_failure do |env,opts|
   env['REQUEST_METHOD'] = 'POST'
 end
-
-Warden::Manager.serialize_into_session { |user| user.id }
-Warden::Manager.serialize_from_session { |id| User.get(id) }
 
 Warden::Strategies.add(:password) do
 

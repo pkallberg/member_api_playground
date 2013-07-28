@@ -32,7 +32,7 @@ end
 
 module Users
   class API < Grape::API
-    use Rack::Session::Cookie#, :secret => "replace this with some secret key"
+    # use Rack::Session::Cookie, :secret => "replace this with some secret"
 
     use Warden::Manager do |manager|
       manager.default_strategies :password
@@ -47,6 +47,12 @@ module Users
 
     resource :users do
 
+      post 'login' do
+        env['warden'].authenticate(:password)
+        error! "Invalid username or password", 401 unless env['warden'].user
+        { "username" => env['warden'].user.first_name }
+      end
+
       desc "Return all users."
       get '/' do
         users = User.limit(20)
@@ -59,8 +65,7 @@ module Users
       end
       route_param :id do
         get do
-          # env['warden'].authenticate(:password)
-          env['warden'].authenticate!
+          env['warden'].authenticate
           if env['warden'].authenticated?
             user = User.find(params[:id])
             present user, with: Entities::User, type: :full
