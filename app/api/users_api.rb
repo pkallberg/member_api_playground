@@ -27,7 +27,6 @@ module Entities
     expose :full_name
     expose :email
     expose :created_at, :format_with => :timestamp
-    expose :password #temp while testing warden
   end
 end
 
@@ -53,6 +52,14 @@ module Users
         error! "Invalid username or password", 401 unless env['warden'].user
         # { "username" => env['warden'].user.first_name }
         redirect "/users/#{env['warden'].user.id}"
+      end
+
+      post 'logout' do
+        env['warden'].authenticate
+        error! "Logged out", 401 unless env['warden'].user
+
+        env['warden'].logout
+        { "status" => "ok" }
       end
 
       desc "Return all users."
