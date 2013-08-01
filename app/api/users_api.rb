@@ -27,12 +27,13 @@ module Entities
     expose :full_name
     expose :email
     expose :created_at, :format_with => :timestamp
+    expose :password #temp while testing warden
   end
 end
 
 module Users
   class API < Grape::API
-    # use Rack::Session::Cookie, :secret => "replace this with some secret"
+    use Rack::Session::Cookie, :secret => "replace this with some secret"
 
     use Warden::Manager do |manager|
       manager.default_strategies :password
@@ -50,7 +51,8 @@ module Users
       post 'login' do
         env['warden'].authenticate(:password)
         error! "Invalid username or password", 401 unless env['warden'].user
-        { "username" => env['warden'].user.first_name }
+        # { "username" => env['warden'].user.first_name }
+        redirect "/users/#{env['warden'].user.id}"
       end
 
       desc "Return all users."
@@ -65,13 +67,13 @@ module Users
       end
       route_param :id do
         get do
-          env['warden'].authenticate
-          if env['warden'].authenticated?
+          # env['warden'].authenticate
+          # if env['warden'].authenticated?
             user = User.find(params[:id])
             present user, with: Entities::User, type: :full
-          else
-            error! "Unauthorized", 401 unless env['warden'].user
-          end
+          # else
+            # error! "Unauthorized", 401 unless env['warden'].user
+          # end
         end
       end
 
