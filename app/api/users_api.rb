@@ -27,6 +27,7 @@ module Entities
     expose :full_name
     expose :email
     expose :created_at, :format_with => :timestamp
+    expose :password
   end
 end
 
